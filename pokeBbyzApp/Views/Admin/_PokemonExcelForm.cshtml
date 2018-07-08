@@ -1,0 +1,21 @@
+﻿@model pokeBbyzApp.Models.ExcelViewModel
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @class = "excelForm" }))
+{
+    <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-8">
+            @Html.Label("Upload Excel file:") 
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-4">
+            <input type="file" name="UploadedFile" />
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-4">
+            <button class="btn btn-default">Submit</button>
+        </div>
+    </div>
+}

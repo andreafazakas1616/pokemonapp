@@ -1,0 +1,43 @@
+﻿@model pokeBbyzApp.Models.PokemonSpeciesViewModel
+@{
+    ViewBag.Title = "Pokemon details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-offset-1 col-sm-12 col-md-10">
+        @Html.LabelFor(m => m.Name) : @Model.Name
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-offset-1 col-sm-12 col-md-5">
+        @if (!string.IsNullOrEmpty(Model.FrontImage))
+        {
+            //this line shows a base64 string as an image
+            @Html.LabelFor(m => m.FrontImage)
+            <img src="data:image;base64,@Model.FrontImage" width="80" height="80" />
+        }
+    </div>
+    <div class="col-md-offset-1 col-sm-12 col-md-5">
+        @if (!string.IsNullOrEmpty(Model.BackImage))
+        {
+            //this line shows a base64 string as an image
+            @Html.LabelFor(m => m.BackImage)
+            <img src="data:image;base64,@Model.BackImage" width="80" height="80" />
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-offset-1 col-sm-12 col-md-5">
+        @Html.LabelFor(m => m.PokemonType)
+        @Model.PokemonType.Name
+    </div>
+    <div class="col-md-offset-1 col-sm-12 col-md-5">
+        @if (Model.PokemonType1 != null)
+        {
+            @Html.LabelFor(m => m.PokemonType1)
+            @Model.PokemonType1.Name
+        }
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@model pokeBbyzApp.Models.PokemonSpeciesViewModel
+
+@{
+    ViewBag.Title = "Delete a pokemon";
+}
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PokemonType.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PokemonType1.Name)
+        </dd>
+        @if (Model.PokemonType1 != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.PokemonType1.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.PokemonType1.Name)
+            </dd>
+        }
+        @if (!string.IsNullOrEmpty(Model.FrontImage))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.FrontImage)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FrontImage)
+            </dd>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.BackImage))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.BackImage)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.BackImage)
+            </dd>
+        }
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.ID)
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />
+        </div>
+        <p>
+            @Html.ActionLink("Back to List", "Index", "Admin")
+        </p>
+    }
+</div>

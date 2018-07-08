@@ -1,0 +1,64 @@
+﻿@model pokeBbyzApp.Models.AdminPageViewModel
+
+@{
+    ViewBag.Title = "Choose your starter pokemon.";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Choose your starter pokemon.</h2>
+
+<table class="table table-hover">
+    <tr class="row">
+        <th class="col-xs-4">Name</th>
+        <th class="col-xs-2">Type 1</th>
+        <th class="col-xs-2">Type 2</th>
+        <th class="col-xs-2">Image</th>
+        <th class="col-xs-2">Choose pokemon</th>
+    </tr>
+    @foreach (var pokemon in Model.PokemonSpeciesList)
+    {
+        <tr class="row">
+            <td class="col-xs-4">@pokemon.Name</td>
+            <td class="col-xs-2">@pokemon.PokemonType.Name</td>
+            @if (@pokemon.PokemonType1 == null)
+            {
+                <td class="col-xs-2"></td>
+            }
+            else
+            {
+                <td class="col-xs-2">@pokemon.PokemonType1.Name</td>
+            }
+            <td class="col-xs-4"><img src="data:image;base64,@pokemon.FrontImage" width="80" height="80" /></td>
+            <td class="col-xs-2"><a class="choose-pokemon" data-pokemonId="@pokemon.ID" href="#">Choose</a></td>
+        </tr>
+    }
+</table>
+
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="pokemon-form">
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var modal = $('#myModal');
+            var span = $(".close");
+            $(".choose-pokemon").click(function () {
+                var pokemonId = parseInt(this.getAttribute("data-pokemonId"));
+                $("#pokemon-form").load('@Url.Action("CreateStarterPokemon", "Player")', { id: pokemonId });
+                $('#myModal').show();
+        });
+        span.click(function () {
+            $('#myModal').hide();
+        });
+
+    });
+    </script>
+}
+
+

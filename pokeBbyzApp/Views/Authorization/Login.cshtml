@@ -1,0 +1,98 @@
+﻿@model pokeBbyzApp.Models.UserViewModel
+@{
+    ViewBag.Title = "Welcome!";
+}
+
+<div class="transparentBody col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8 margin-top" style="text-align:center">
+    <div class="row">
+        <div class="input-group col-md-offset-2 col-md-4 col-sm-offset-2 col-sm-4">
+            @Html.RadioButton("userRadio", "login", true)
+            @Html.Label("Returning user")
+        </div>
+        <div class="input-group col-md-4 col-sm-4">
+            @Html.RadioButton("userRadio", "register")
+            @Html.Label("New User")
+        </div>
+    </div>
+    <hr />
+    <div id="loginForm">
+        @Html.ValidationSummary()
+        @using (Html.BeginForm("Login", "Authorization", FormMethod.Post, new { id = "loginForm" }))
+        {
+            <div class="row">
+                <div class="form-group col-sm-offset-2 col-sm-8">
+                    @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control allow-max-width", id = "loginUsername" } })  
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-offset-2 col-sm-8">
+                    @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control allow-max-width", id = "loginPassword" })
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-offset-2 col-sm-8">
+                    @Html.CheckBoxFor(model=>model.RememberMe)
+                    @Html.LabelFor(model => model.RememberMe)
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-success">Log in</button>
+        }
+    </div>
+    <div id="registerForm" style="display:none">
+        @using (Html.BeginForm("Register", "Authorization", FormMethod.Post, new { id = "registerForm" }))
+        {
+            <div class="row">
+                <div class="form-group col-sm-offset-2 col-sm-8">
+                    @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control allow-max-width" } })
+                    @Html.ValidationMessageFor(model => model.Username)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-offset-2 col-sm-8">
+                    @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control allow-max-width" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-offset-2 col-sm-8">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control allow-max-width" } })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+                <br>
+                @Html.RadioButtonFor(model => model.Gender, true, new { Checked = true, id = "maleGender" }) <span>Male</span>
+                @Html.RadioButtonFor(model => model.Gender, false, new { id = "femaleGender" }) <span>Female</span>
+            </div>
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-success">Register</button>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("input[name=userRadio]").on("change", function () {
+
+                var radioValue = $(this).val();
+                if (radioValue == "login") {
+                    $("#loginForm").show();
+                    $("#registerForm").hide();
+                }
+                else if (radioValue == "register") {
+                    $("#registerForm").show();
+                    $("#loginForm").hide();
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - PokeBbyz</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Styles.Render("~/Content/loggedIn")
+    }
+    else
+    {
+        @Styles.Render("~/Content/notLoggedIn")
+    }
+    @Styles.Render("~/Content/error")
+</head>
+<body id="body">
+    <div class="col-sm-offset-1 col-sm-10 navbar navbar-inverse navbar-fixed-top darkPurpleBg">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                     {
+                          <li>@Html.ActionLink("My Profile-Not developed", "PlayerProfile", "Player")</li>
+                          <li>@Html.ActionLink("World-Not developed", "World", "World")</li>
+                          <li>@Html.ActionLink("Chat-Not developed", "Chat", "Chat")</li>
+                    }
+                    else
+                    {
+                          <li>@Html.ActionLink("About", "About", "Home")</li>
+                          <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Admin Page", "Index", "Admin")</li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Logout", "Logout", "Authorization")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Log In", "Login", "Authorization")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="body-content col-sm-offset-1 col-sm-10 purpleBody allow-max-width" style="background-attachment: fixed!important">
+        @RenderBody()
+    </div>
+    <div class="col-sm-offset-1 col-sm-10 navbar navbar-fixed-bottom darkPurpleBg">
+        <footer style="color: darkgray; position: relative;font-size: small" class="text-center">
+            <p>            </p>
+            Pokémon © 2002-@DateTime.Now.Year Pokémon. © 1995-@DateTime.Now.Year Nintendo/Creatures Inc./GAME FREAK inc. TM, ® and Pokémon character names are trademarks of Nintendo.
+
+            <p>
+                No copyright or trademark infringement is intended in using Pokémon content on this purely presentational, non-commercial website.
+            </p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

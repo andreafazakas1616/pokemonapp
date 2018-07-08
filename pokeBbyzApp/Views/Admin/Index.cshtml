@@ -1,0 +1,138 @@
+﻿@model pokeBbyzApp.Models.AdminPageViewModel
+@{
+    ViewBag.Title = "Admin Pannel";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<div class="row addButton">@Html.ActionLink("Add a pokemon", "Create", "Pokemon", null, new { @class = "btn btn-primary col-md-2" })</div>
+<br />
+<div class="row addButton"><button id="uploadExcel" class="btn btn-success col-md-2">Add pokemon from Excel</button></div>
+<br />
+@*@using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @class = "excelForm" }))
+    {
+        <table>
+            <tr>
+                <td>File:</td>
+                <td>
+                    <input type="file" name="UploadedFile" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="Submit" value="Submit" />
+                </td>
+            </tr>
+        </table>
+    }*@
+
+<table class="table table-hover">
+    <tr class="row">
+        <th class="col-xs-1">Pokemon ID</th>
+        <th class="col-xs-3">Name</th>
+        <th class="col-xs-2">Type 1</th>
+        <th class="col-xs-2">Type 2</th>
+        <th class="col-xs-2">Starter Pokemon</th>
+        <th class="col-xs-2">Actions</th>
+    </tr>
+    @for (var i = 0; i < Model.PokemonSpeciesList.Count; i++)
+    {
+        <tr class="row">
+            <td class="col-xs-1">@Model.PokemonSpeciesList[i].ID</td>
+            <td class="col-xs-3">@Model.PokemonSpeciesList[i].Name</td>
+            <td class="col-xs-2">@Model.PokemonSpeciesList[i].PokemonType.Name</td>
+            @if (@Model.PokemonSpeciesList[i].PokemonType1 == null)
+            {
+                <td class="col-xs-2"></td>
+            }
+            else
+            {
+                <td class="col-xs-2">@Model.PokemonSpeciesList[i].PokemonType1.Name</td>
+            }
+            <td class="col-xs-2">@Html.CheckBoxFor(m => Model.PokemonSpeciesList[i].IsStarterPokemon, new { @class = "starter-checkbox", data_pokemonid = Model.PokemonSpeciesList[i].ID })</td>
+            <td class="col-xs-2">
+                <a href="@Url.Action("Details", "Pokemon", new { pokemonId = Model.PokemonSpeciesList[i].ID })" class="btn btn-success btn-xs">
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                </a>
+                <a href="@Url.Action("Edit", "Pokemon", new { pokemonId = Model.PokemonSpeciesList[i].ID })" class="btn btn-warning btn-xs">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </a>
+                <a href="@Url.Action("Delete", "Pokemon", new { pokemonId = Model.PokemonSpeciesList[i].ID })" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+<div class="hidden-content" style="visibility:hidden"></div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="excel-form">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $(".starter-checkbox").click(function () {
+            var id = this.getAttribute("data-pokemonid");
+            if ($(this).is(":checked")) {
+                var isStarter = true;
+            }
+            else
+            {
+                var isStarter = false;
+            }
+            $(".hidden-content").load('@Url.Action("StarterPokemon", "Pokemon")', { id: id, isStarter: isStarter });
+        });
+
+        var errors = @Html.Raw(Json.Encode(Model.Errors));
+        if (errors[0] != undefined) {
+            if (errors[0].indexOf('Excel') >= 0) {
+                noty({
+                    layout: 'top',
+                    type: 'error',
+                    text: errors[0],
+                    theme: 'relax',
+                    dismissQueue: true,
+                    animation: {
+                        open: { height: 'toggle' },
+                        close: { height: 'toggle' },
+                        easing: 'swing',
+                        speed: 500
+                    },
+                    timeout: 1900
+                });
+            }
+            else {
+                $.each(errors, function () {
+                    noty({
+                        layout: 'top',
+                        type: 'warning',
+                        text: this + " already exists.",
+                        theme: 'relax',
+                        dismissQueue: true,
+                        animation: {
+                            open: { height: 'toggle' },
+                            close: { height: 'toggle' },
+                            easing: 'swing',
+                            speed: 500
+                        },
+                        timeout: 1900
+                    });
+                });
+            }
+        };
+
+        var span = $(".close");
+        $('#uploadExcel').click(function () {
+          $("#excel-form").load('@Url.Action("UploadPokemonExcel", "Admin")');
+          $('#myModal').show();
+        });
+        span.click(function () {
+            $('#myModal').hide();
+        });
+
+    });
+    </script>
+}

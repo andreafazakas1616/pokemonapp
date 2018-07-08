@@ -1,0 +1,39 @@
+﻿@model pokeBbyzApp.Models.PokemonViewModel
+
+@{
+    ViewBag.Title = "Your starter pokemon";
+}
+
+<h2>Congratulations! You got your first pokemon!</h2>
+<p>
+    Your pokemon is a @Model.Gender
+</p>
+
+@using (Html.BeginForm("CreateStarter", "Player"))
+{
+    @Html.HiddenFor(m => m.OwnerID)
+    @Html.HiddenFor(m => m.Species)
+    @Html.HiddenFor(m => m.Gender)
+    @Html.ValidationSummary(true)
+    <p style="display:none">You must choose a nickname for your pokemon.</p>
+    <div class="editor-label">@Html.LabelFor(m => m.Nickname, new { id ="nickname-label"})</div>
+    <div class="editor-field">
+    @Html.EditorFor(m => m.Nickname, new { @id="nickname"})
+    @Html.ValidationMessageFor(m => m.Nickname)
+    </div>
+    <input class="submit-button" type="submit" value="Choose my pokemon">
+}
+
+<script>
+    //# sourceURL=_fooPartialView.cshtml
+    $(document).ready(function () {
+        $(".submit-button").click(function () {
+            $("#pokemon-form").submit(function () {
+                if ($("#Nickname").val() === "") {
+                    $("p").show();
+                    return false;
+                }
+            });
+        });
+    });
+</script>
